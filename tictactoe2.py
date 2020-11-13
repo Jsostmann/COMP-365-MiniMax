@@ -86,26 +86,27 @@ def movesLeft(board):
 
 '''Returns the winner of the game, if there is one.'''
 def winner(board):
-    gameWinner = None
+    
+    win = None
     
     # checks for diagonal winner from top left to bottom right and bottom left to top right
-    if(board[0][0] == board[1][1] and board[1][1] == board[2][2]) or\
-        (board[0][2] == board[1][1] and board[2][0] == board[1][1]):
-            gameWinner = board[1][1]
-            return gameWinner
+    if(board[1][1] == board[0][0] and board[0][0] == board[2][2])\
+        or (board[1][1] == board[0][2] and board[0][2] == board[2][0]):
+            win = board[1][1]
+            return win
 
     for i in range(3):
         #checks for winner on each row
         if board[i][0] == board[i][1] and board[i][1] == board[i][2]:
-            gameWinner = board[i][1]
+            win = board[i][1]
             break
         
         # checks for winner on each collumn
         elif board[0][i] == board[1][i] and board[1][i] == board[2][i]:
-            gameWinner = board[1][i]
+            win = board[1][i]
             break
 
-    return gameWinner
+    return win
 
 '''Returns True if game is over, False otherwise.'''
 def terminal(board):
@@ -136,36 +137,6 @@ def utility(board):
             
     return None
 
-'''our helper recursive method for minimax function but with a set depth to stop at'''
-def minimaxRecDepth(board, isMaximizer, depth):
-    # if end state return 1 for max win -1 for min win and 0 for tie
-    if utility(board) is not None:
-        if isMaximizer:
-            return utility(board) + depth
-        else:
-            return utility(board) - depth
-
-    if isMaximizer == True:
-        score = -math.inf
-        for action in actions(board):
-            newBoard = result(board, action)
-            print("Before " + str(depth))
-            minPlayer = minimaxRecDepth(newBoard, not isMaximizer, depth + 1)
-            print("After " + str(depth))
-            score = max(minPlayer,score)
-
-        return score
-
-    elif isMaximizer == False:
-        score = math.inf
-        for action in actions(board):
-            newBoard = result(board, action)
-            print("Before " + str(depth))
-            maxPlayer = minimaxRecDepth(newBoard,not isMaximizer, depth + 1)
-            print("After: " + str(depth))
-            score = min(maxPlayer, score)
-        
-        return score
 
 '''our helper recursive method for the minimax function'''
 def minimaxRec(board, isMaximizer):
@@ -211,9 +182,7 @@ def minimax(board):
 
     for action in actions(board):
         move = result(board,action)
-        #score = minimaxRec(move, not maximizer)
-        score = minimaxRecDepth(move, not maximizer, 0)
-
+        score = minimaxRec(move, not maximizer)
     
         if maximizer:
             if score > best_score:
