@@ -211,9 +211,8 @@ def minimax(board):
 
     for action in actions(board):
         move = result(board,action)
-        #score = minimaxRec(move, not maximizer)
-        score = minimaxRecDepth(move, not maximizer, 0)
-
+        score = minimaxRec(move, not maximizer)
+        #score = minimaxRecDepth(move, not maximizer, 0)
     
         if maximizer:
             if score > best_score:
